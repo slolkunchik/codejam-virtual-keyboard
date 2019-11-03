@@ -57,3 +57,12 @@
 #row4 > div:nth-child(3) {
   flex-grow: 1;
 }
+.pressed {
+  -webkit-animation: changeColor 0.5s; /* Safari 4.0 - 8.0 */
+  animation: changeColor 0.5s;
+}
+
+@keyframes changeColor {
+  0%     {background-color: green; border-radius: 30%;}
+  100.0%  {background-color:#fcfcfc; border-radius: 5px;}
+}

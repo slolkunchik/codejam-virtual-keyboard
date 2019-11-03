@@ -80,6 +80,26 @@ class Keyboard {
         }
         this._keyboardElement.insertAdjacentHTML('beforeend', divs);
         this._buttons.forEach(button => button.render(this._locale));
+        let self = this;
+        function clickButton (event) {
+            let code;
+            if (event.type === 'click') {
+                code = event.target.closest('div').dataset.code;
+                if (!code) return;
+            }
+            if (event.type === 'keydown') {
+                code = event.code;
+            }
+            let pressedButton = self.getButtonByCode(code);
+
+            event.preventDefault();
+            pressedButton.animate(code);
+            pressedButton.print(self._locale);
+        }
+        if (enableListeners === undefined || enableListeners === true) {
+            this._keyboardElement.addEventListener('click', clickButton);
+            document.addEventListener('keydown', clickButton);
+        }
     }
 
     getButtonByCode(code) {
@@ -103,9 +123,20 @@ class Button {
     }
 
     animate(code) {
+        let buttonElement = document.querySelector(`div[data-code=${code}]`);
+        buttonElement.classList.add("pressed");
+        setTimeout(() => buttonElement.classList.remove("pressed"), 500);
     }
 
     print(locale) {
+        let symbol;
+        let selectedCaps = document.querySelector(".selected");
+        if (this._buttonData.characters.special !== undefined) {
+            symbol = this._buttonData.characters.special;
+        } else {
+            symbol = this._buttonData.characters[locale][0];
+        }
+        document.getElementById('kinput').value += `${symbol}`;
     }
 }
 
