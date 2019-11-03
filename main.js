@@ -89,6 +89,11 @@ class Keyboard {
             }
             if (event.type === 'keydown') {
                 code = event.code;
+                if (event.altKey && event.shiftKey) {
+                    self._locale === 'ru' ? self._locale = 'en' : self._locale = 'ru';
+                    self._keyboardElement.innerHTML = '';
+                    self.render(false);
+                }
             }
             let pressedButton = self.getButtonByCode(code);
 
@@ -124,6 +129,10 @@ class Button {
 
     animate(code) {
         let buttonElement = document.querySelector(`div[data-code=${code}]`);
+        if (code === 'CapsLock') {
+            buttonElement.classList.toggle("selected");
+            return;
+        }
         buttonElement.classList.add("pressed");
         setTimeout(() => buttonElement.classList.remove("pressed"), 500);
     }
@@ -133,6 +142,8 @@ class Button {
         let selectedCaps = document.querySelector(".selected");
         if (this._buttonData.characters.special !== undefined) {
             symbol = this._buttonData.characters.special;
+        } else if (selectedCaps) {
+            symbol = this._buttonData.characters[locale][1];
         } else {
             symbol = this._buttonData.characters[locale][0];
         }

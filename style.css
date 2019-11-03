@@ -62,6 +62,10 @@
   animation: changeColor 0.5s;
 }
 
+.selected {
+  background-color: green;
+}
+
 @keyframes changeColor {
   0%     {background-color: green; border-radius: 30%;}
   100.0%  {background-color:#fcfcfc; border-radius: 5px;}
