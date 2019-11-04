@@ -68,14 +68,18 @@ class Keyboard {
       new Button(4, new ButtonData('ArrowRight', { en: ['►', '►'], ru: ['►', '►'] })),
       new Button(4, new ButtonData('ControlRight', { en: ['Ctrl'], ru: ['Ctrl'], special: '' })),
     ];
-    this.locale = 'ru';
     this.caps = 0;
     this.shiftLocked = false;
   }
 
   init() {
+    this.locale = localStorage.getItem('locale') || 'en';
     document.body.insertAdjacentHTML('beforeend', '<div class="wrapper"><textarea class="input-box" id="kinput" rows="10" cols="100"></textarea><div id="keyboard" class="keyboard"></div></div>');
     this.keyboardElement = document.getElementById('keyboard');
+  }
+
+  setDefaultLocale() {
+    localStorage.setItem('locale', this.locale);
   }
 
   render(enableListeners) {
@@ -106,6 +110,7 @@ class Keyboard {
           } else {
             self.locale = 'ru';
           }
+          self.setDefaultLocale();
           self.render(false);
         }
         if (event.shiftKey) {
