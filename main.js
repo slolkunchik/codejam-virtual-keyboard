@@ -87,6 +87,12 @@ class Keyboard {
             if (event.type === 'click') {
                 code = event.target.closest('div').dataset.code;
                 if (!code) return;
+
+                if (code === 'ShiftLeft' || code === 'ShiftRight' || code === 'CapsLock') {
+                    self._caps === 0 ? self._caps = 1 : self._caps = 0;
+                    self._keyboardElement.innerHTML = '';
+                    self.render(false);
+                }
             }
             if (event.type === 'keydown') {
                 code = event.code;
@@ -95,11 +101,11 @@ class Keyboard {
                     self._keyboardElement.innerHTML = '';
                     self.render(false);
                 }
-            }
-            if (code === 'CapsLock') {
-                self._caps === 0 ? self._caps = 1 : self._caps = 0;
-                self._keyboardElement.innerHTML = '';
-                self.render(false);
+                if (event.shiftKey || code === 'CapsLock') {
+                    self._caps === 0 ? self._caps = 1 : self._caps = 0;
+                    self._keyboardElement.innerHTML = '';
+                    self.render(false);
+                }
             }
             let pressedButton = self.getButtonByCode(code);
 
@@ -111,6 +117,7 @@ class Keyboard {
             this._keyboardElement.addEventListener('click', clickButton);
             document.addEventListener('keydown', clickButton);
         }
+
     }
 
     getButtonByCode(code) {
@@ -147,6 +154,16 @@ class Button {
         if (code === 'CapsLock' && caps === 0) {
             buttonElement.classList.remove("selected");
             return;
+        }
+        if (code === 'ShiftLeft' || code === 'ShiftRight') {
+            if (caps === 1) {
+                buttonElement.classList.add("selected");
+                return;
+            }
+            if (caps === 0) {
+                buttonElement.classList.remove("selected");
+                return;
+            }
         }
         buttonElement.classList.add("pressed");
         setTimeout(() => buttonElement.classList.remove("pressed"), 500);
