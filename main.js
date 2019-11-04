@@ -107,6 +107,10 @@ class Keyboard {
                     self.render(false);
                 }
             }
+            if (code === 'Backspace') {
+                let printedArea = document.getElementById('kinput');
+                printedArea.value = printedArea.value.substr(0, printedArea.value.length - 1);
+            }
             let pressedButton = self.getButtonByCode(code);
 
             event.preventDefault();
