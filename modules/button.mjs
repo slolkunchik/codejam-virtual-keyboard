@@ -4,18 +4,19 @@ export default class Button {
     this.buttonData = buttonData;
   }
 
-  render(locale, caps) {
+  render(locale, isCaps) {
     let buttonElement;
     if (this.buttonData.characters.special !== undefined) {
       buttonElement = `<div class="key" data-code="${this.buttonData.code}"><span>${this.buttonData.characters[locale][0]}</span></div>`;
     } else {
-      buttonElement = `<div class="key" data-code="${this.buttonData.code}"><span>${this.buttonData.characters[locale][caps]}</span></div>`;
+      buttonElement = `<div class="key" data-code="${this.buttonData.code}"><span>${this.buttonData.characters[locale][+isCaps]}</span></div>`;
     }
     document.getElementById(`row${this.row}`).insertAdjacentHTML('beforeend', buttonElement);
   }
 
-  animate(caps) {
+  animate(isCaps) {
     const { code } = this.buttonData;
+    const caps = +isCaps;
     const buttonElement = document.querySelector(`div[data-code=${code}]`);
     if (code === 'CapsLock' && caps === 1) {
       buttonElement.classList.add('selected');

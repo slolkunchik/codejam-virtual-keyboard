@@ -70,6 +70,7 @@ class Keyboard {
     ];
     this.locale = 'ru';
     this.caps = 0;
+    this.shiftLocked = false;
   }
 
   init() {
@@ -78,6 +79,7 @@ class Keyboard {
   }
 
   render(enableListeners) {
+    this.keyboardElement.innerHTML = '';
     let divs = '';
     for (let i = 0; i < 5; i += 1) {
       divs = `${divs}<div id="row${i}" class="row"></div>`;
@@ -91,13 +93,8 @@ class Keyboard {
         code = event.target.closest('div').dataset.code;
         if (!code) return;
 
-        if (code === 'ShiftLeft' || code === 'ShiftRight' || code === 'CapsLock') {
-          if (self.caps === 0) {
-            self.caps = 1;
-          } else {
-            self.caps = 0;
-          }
-          self.keyboardElement.innerHTML = '';
+        if (['ShiftLeft', 'ShiftRight'].indexOf(code) !== -1) {
+          self.caps = !self.caps;
           self.render(false);
         }
       }
@@ -109,32 +106,45 @@ class Keyboard {
           } else {
             self.locale = 'ru';
           }
-          self.keyboardElement.innerHTML = '';
           self.render(false);
         }
-        if (event.shiftKey || code === 'CapsLock') {
-          if (self.caps === 0) {
-            self.caps = 1;
-          } else {
-            self.caps = 0;
+        if (event.shiftKey) {
+          if (self.shiftLocked === false) {
+            self.shiftLocked = true;
+            self.caps = true;
+            self.render(false);
+            code = event.code;
           }
-          self.keyboardElement.innerHTML = '';
+        }
+      }
+      if (event.type === 'keyup') {
+        if (['ShiftLeft', 'ShiftRight'].indexOf(event.code) !== -1) { // event.shiftKey didn't work on 'keyup'
+          self.shiftLocked = false;
+          self.caps = false;
           self.render(false);
+          code = event.code;
         }
       }
       if (code === 'Backspace') {
         const printedArea = document.getElementById('kinput');
         printedArea.value = printedArea.value.substr(0, printedArea.value.length - 1);
       }
-      const pressedButton = self.getButtonByCode(code);
-
+      if (code === 'CapsLock') {
+        self.caps = !self.caps;
+        self.render(false);
+      }
       event.preventDefault();
-      pressedButton.animate(self.caps);
-      pressedButton.print(self.locale);
+
+      if (code) {
+        const pressedButton = self.getButtonByCode(code);
+        pressedButton.animate(self.caps);
+        pressedButton.print(self.locale);
+      }
     }
     if (enableListeners === undefined || enableListeners === true) {
       this.keyboardElement.addEventListener('click', clickButton);
       document.addEventListener('keydown', clickButton);
+      document.addEventListener('keyup', clickButton);
     }
   }
 
