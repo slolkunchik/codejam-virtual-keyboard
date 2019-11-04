@@ -66,6 +66,7 @@ class Keyboard {
             new Button(4, new ButtonData('ControlRight', {'en': ['Ctrl'], 'ru': ['Ctrl'], 'special': ''}))
         ];
         this._locale = 'ru';
+        this._caps = 0;
     }
 
     init() {
@@ -79,7 +80,7 @@ class Keyboard {
             divs = `${divs}<div id="row${i}" class="row"></div>`;
         }
         this._keyboardElement.insertAdjacentHTML('beforeend', divs);
-        this._buttons.forEach(button => button.render(this._locale));
+        this._buttons.forEach(button => button.render(this._locale, this._caps));
         let self = this;
         function clickButton (event) {
             let code;
@@ -95,10 +96,15 @@ class Keyboard {
                     self.render(false);
                 }
             }
+            if (code === 'CapsLock') {
+                self._caps === 0 ? self._caps = 1 : self._caps = 0;
+                self._keyboardElement.innerHTML = '';
+                self.render(false);
+            }
             let pressedButton = self.getButtonByCode(code);
 
             event.preventDefault();
-            pressedButton.animate(code);
+            pressedButton.animate(code, self._caps);
             pressedButton.print(self._locale);
         }
         if (enableListeners === undefined || enableListeners === true) {
@@ -122,15 +128,24 @@ class Button {
         this._buttonData = buttonData;
     }
 
-    render(locale) {
-        let buttonElement = `<div class="key" data-code="${this._buttonData.code}"><span>${this._buttonData.characters[locale][0]}</span></div>`;
+    render(locale, caps) {
+        let buttonElement;
+        if (this._buttonData.characters.special !== undefined) {
+            buttonElement = `<div class="key" data-code="${this._buttonData.code}"><span>${this._buttonData.characters[locale][0]}</span></div>`;
+        } else {
+            buttonElement = `<div class="key" data-code="${this._buttonData.code}"><span>${this._buttonData.characters[locale][caps]}</span></div>`;
+        }
         document.getElementById(`row${this._row}`).insertAdjacentHTML('beforeend', buttonElement);
     }
 
-    animate(code) {
+    animate(code, caps) {
         let buttonElement = document.querySelector(`div[data-code=${code}]`);
-        if (code === 'CapsLock') {
-            buttonElement.classList.toggle("selected");
+        if (code === 'CapsLock' && caps === 1) {
+            buttonElement.classList.add("selected");
+            return;
+        }
+        if (code === 'CapsLock' && caps === 0) {
+            buttonElement.classList.remove("selected");
             return;
         }
         buttonElement.classList.add("pressed");
