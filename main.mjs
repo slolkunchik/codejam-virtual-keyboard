@@ -32,7 +32,6 @@ class Keyboard {
       new Button(1, new ButtonData('BracketLeft', { en: ['[', '{'], ru: ['х', 'Х'] })),
       new Button(1, new ButtonData('BracketRight', { en: [']', '}'], ru: ['ъ', 'Ъ'] })),
       new Button(1, new ButtonData('Backslash', { en: ['\\', '|'], ru: ['\\', '/'] })),
-      new Button(1, new ButtonData('Delete', { en: ['Delete'], ru: ['Delete'], special: '' })),
       new Button(2, new ButtonData('CapsLock', { en: ['Caps Lock'], ru: ['Caps Lock'], special: '' })),
       new Button(2, new ButtonData('KeyA', { en: ['a', 'A'], ru: ['ф', 'Ф'] })),
       new Button(2, new ButtonData('KeyS', { en: ['s', 'S'], ru: ['ы', 'Ы'] })),

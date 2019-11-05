@@ -2,32 +2,40 @@
   max-width: 1000px;
   margin: 0 auto;
 }
+
 .input-box {
   display: block;
   width: 820px;
   margin: 15px auto;
   padding: 15px;
+
   background-color: #e6eafb;
 }
+
 .keyboard {
   width: 900px;
   margin: 0 auto;
   padding: 0 5px 10px 5px;
-  background-color: #d5d5d8;
+
   font-family: Arial, sans-serif;
+
+  background-color: #d5d5d8;
 }
 
 .key {
-  margin: 10px 5px 0 5px;
-  border-radius: 5px;
-  border-bottom: 1px solid #898b8d;
-  background-color: #fcfcfc;
   width: 45px;
   height: 45px;
+  margin: 10px 5px 0 5px;
+
   font-weight: 700;
   line-height: 40px;
   text-align: center;
+
+  background-color: #fcfcfc;
+  border-bottom: 1px solid #898b8d;
+  border-radius: 5px;
   cursor: pointer;
+
   user-select: none;
 }
 
@@ -39,10 +47,12 @@
 #row0 > div:last-child {
   flex-grow: 1;
 }
+
 #row1 > div:last-child,
 #row1 > div:first-child {
   flex-grow: 0.5;
 }
+
 #row2 > div:first-child,
 #row2 > div:last-child {
   flex-grow: 0.5;
@@ -51,15 +61,18 @@
 #row3 > div:first-child {
   flex-grow: 0.7;
 }
+
 #row3 > div:last-child {
   flex-grow: 0.3;
 }
+
 #row4 > div:nth-child(3) {
   flex-grow: 1;
 }
+
 .pressed {
   -webkit-animation: changeColor 0.5s; /* Safari 4.0 - 8.0 */
-  animation: changeColor 0.5s;
+          animation: changeColor 0.5s;
 }
 
 .selected {
@@ -67,6 +80,12 @@
 }
 
 @keyframes changeColor {
-  0%     {background-color: green; border-radius: 30%;}
-  100.0%  {background-color:#fcfcfc; border-radius: 5px;}
+  0% {
+    background-color: green;
+    border-radius: 30%;
+  }
+  100.0% {
+    background-color: #fcfcfc;
+    border-radius: 5px;
+  }
 }
